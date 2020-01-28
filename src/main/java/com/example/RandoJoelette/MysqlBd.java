@@ -19,9 +19,10 @@ public class MysqlBd {
 	
 	public void connect(String db_userid, String db_password) {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			this.conn = DriverManager.getConnection("jdbc:mysql://mysql-dorianmalavergne.alwaysdata.net/dorianmalavergne_randojoelette?"
-					+ "user=" + db_userid + "&password=" + db_password);
+					+ "user=" + db_userid + "&password=" + db_password
+					+ "&serverTimezone=UTC");
 			this.conn.setAutoCommit(false);
 		} catch (Exception err) {
 			System.out.println(err.getMessage());
