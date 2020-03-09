@@ -47,4 +47,57 @@ public class Login {
 			return null;
 		}
 	}
+	
+	@CrossOrigin(origins= "*")
+	@GetMapping("/getRandonnee")
+	public String getRandonnee(@RequestParam String name) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			MysqlBd bd = new MysqlBd();
+			bd.connect("198699_admin", "Adminrando123");
+			Randonnee randonnee = bd.getRandonnee(name);
+			String reponse = mapper.writeValueAsString(randonnee);
+			bd.close();
+			return reponse;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@CrossOrigin(origins = "*")
+	@GetMapping("/getRandonneurRandonnee")
+	public String getRandonneurRandonnee(@RequestParam int idRandonneur) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			MysqlBd bd = new MysqlBd();
+			bd.connect("198699_admin", "Adminrando123");
+			List<Randonnee> randonnees = bd.getRandonneurRandonnee(idRandonneur);
+			String reponse = mapper.writeValueAsString(randonnees);
+			bd.close();
+			return reponse;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@CrossOrigin(origins= "*")
+	@GetMapping("/inscriptionRandonneur")
+	public String inscriptionRandonneur(@RequestParam String login, @RequestParam String password, @RequestParam String nom, @RequestParam String prenom ,@RequestParam String add, @RequestParam String tel, @RequestParam String stat) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			MysqlBd bd = new MysqlBd();
+			bd.connect("198699_admin", "Adminrando123");
+			Randonneur randonneur = bd.inscription(login, password, nom, prenom, add, tel, stat);
+			String reponse = mapper.writeValueAsString(randonneur);
+			bd.close();
+			return reponse;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }
