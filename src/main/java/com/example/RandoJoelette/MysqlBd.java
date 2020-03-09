@@ -2,6 +2,7 @@ package com.example.RandoJoelette;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -136,6 +137,38 @@ public class MysqlBd {
 			return null;
 		}
 	}
+	
+	public Randonnee getRandonneeById(int idRando) {
+		Statement stmt = null;
+		try {
+			stmt = this.conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM randonnee WHERE idRando='" + idRando + "'");
+
+			while(rs.next()) {
+				int idRandonnee = rs.getInt("idRando");
+				String libelle = rs.getString("libelle");
+				String date = rs.getString("date");
+				String lieu = rs.getString("lieu");
+				String dateEcheance = rs.getString("date_echeance");
+				int participantMin = rs.getInt("participant_min");
+				int participantInscrit = rs.getInt("participant_inscrit");
+				int participantHandicape = rs.getInt("participant_handicape");
+				int active = rs.getInt("active");
+
+				Randonnee randonnee = new Randonnee(idRandonnee, libelle, date, lieu,
+						dateEcheance, participantMin, participantInscrit,
+						participantHandicape, active);
+
+				return randonnee;
+			}
+			rs.close();
+			stmt.close();
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public List<Randonnee> getRandonneurRandonnee(int idRandonneur) {
 		List<Randonnee> randonneurRandonnee = new ArrayList<Randonnee>();
@@ -179,12 +212,38 @@ public class MysqlBd {
 	public Randonneur inscription(String log, String pass, String nom, String prenom, String add, String tel, String stat) {
 		Statement stmt = null;
 		String sql = ("INSERT INTO randonneur (login, password, nom, prenom, adresse, telephone, statut)"
-				+ " VALUES ('"+log+"', '"+pass+"', '"+nom+"', '"+prenom+"', '"+add+"', '"+tel+"', '"+stat+"')");
+				+ " VALUES ('"
+				+ log    + "', '"
+				+ pass   + "', '"
+				+ nom    + "', '"
+				+ prenom + "', '"
+				+ add    + "', '"
+				+ tel    + "', '"
+				+ stat   + "')");
 		try {
 			stmt = this.conn.createStatement();
-			stmt.execute(sql);
-			return new Randonneur(0, log, pass, nom, prenom, add, tel , stat);
+			stmt.executeUpdate(sql);
+			Randonneur randonneur = new Randonneur(0, log, pass, nom, prenom, add, tel , stat);
+			this.conn.commit();
+			this.conn.close();
+			return randonneur;
 		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Randonnee valideParticipation(int idRandonneur, int idRandonnee) {
+		Statement stmt = null;
+		String sql = "INSERT INTO randonneurRandonnee (idRandonneur, idRandonnee) VALUES(" + idRandonneur + ", " + idRandonnee + ")";
+		
+		try {
+			stmt = this.conn.createStatement();
+			stmt.executeUpdate(sql);
+			stmt.close();
+			this.conn.commit();
+			return getRandonneeById(idRandonnee);
+		} catch(Exception e) {
 			e.printStackTrace();
 			return null;
 		}

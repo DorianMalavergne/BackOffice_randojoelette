@@ -66,6 +66,24 @@ public class Login {
 		}
 	}
 	
+	@CrossOrigin(origins= "*")
+	@GetMapping("/getRandonneeById")
+	public String getRandonneeById(@RequestParam int idRandonnee) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			MysqlBd bd = new MysqlBd();
+			bd.connect("198699_admin", "Adminrando123");
+			Randonnee randonnee = bd.getRandonneeById(idRandonnee);
+			String reponse = mapper.writeValueAsString(randonnee);
+			bd.close();
+			return reponse;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	@CrossOrigin(origins = "*")
 	@GetMapping("/getRandonneurRandonnee")
 	public String getRandonneurRandonnee(@RequestParam int idRandonneur) {
@@ -97,6 +115,23 @@ public class Login {
 			bd.close();
 			return reponse;
 		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@CrossOrigin(origins = "*")
+	@GetMapping("/valideParticipation")
+	public String valideParticipation(@RequestParam int idRandonneur, @RequestParam int idRandonnee) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			MysqlBd bd = new MysqlBd();
+			bd.connect("198699_admin", "Adminrando123");
+			Randonnee randonnee = bd.valideParticipation(idRandonneur, idRandonnee);
+			String reponse = mapper.writeValueAsString(randonnee);
+			bd.close();
+			return reponse;
+		} catch(Exception e) {
 			return null;
 		}
 	}
