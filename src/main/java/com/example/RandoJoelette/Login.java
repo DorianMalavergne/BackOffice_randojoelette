@@ -135,4 +135,21 @@ public class Login {
 			return null;
 		}
 	}
+	
+	@CrossOrigin(origins= "*")
+	@GetMapping("/ajoutRandonnee")
+	public String ajoutRandonnee(@RequestParam String libelle, @RequestParam String date, @RequestParam String lieu, @RequestParam String date_echeance, @RequestParam int participants_min, @RequestParam int participants_inscrits, @RequestParam int participants_handicapes, @RequestParam int active) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			MysqlBd bd = new MysqlBd();
+			bd.connect("198699_admin", "Adminrando123");
+			Randonnee rando = bd.ajoutRando(libelle, date, lieu, date_echeance, participants_min, participants_inscrits, participants_handicapes, active);
+			String reponse = mapper.writeValueAsString(rando);
+			bd.close();
+			return reponse;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

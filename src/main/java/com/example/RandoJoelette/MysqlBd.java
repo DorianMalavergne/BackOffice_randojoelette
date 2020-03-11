@@ -248,4 +248,29 @@ public class MysqlBd {
 			return null;
 		}
 	}
+	
+	public Randonnee ajoutRando(String libelle, String date, String lieu, String date_echeance, int participants_min, int participants_inscrits, int participants_handicapes, int active) {
+		Statement stmt = null;
+		String sql = ("INSERT INTO randonnee (libelle, date, lieu, date_echeance, participant_min, participant_inscrit, participant_handicape, active)"
+				+ " VALUES ('"
+				+ libelle    + "', '"
+				+ date   + "', '"
+				+ lieu    + "', '"
+				+ date_echeance + "', '"
+				+ participants_min    + "', '"
+				+ participants_inscrits    + "', '"
+				+ participants_handicapes    + "', '"
+				+ active   + "')");
+		try {
+			stmt = this.conn.createStatement();
+			stmt.executeUpdate(sql);
+			Randonnee rando = new Randonnee(0, libelle, date, lieu, date_echeance, participants_min, participants_inscrits , participants_handicapes, active);
+			this.conn.commit();
+			this.conn.close();
+			return rando;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
