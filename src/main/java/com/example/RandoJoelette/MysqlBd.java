@@ -249,6 +249,24 @@ public class MysqlBd {
 		}
 	}
 	
+	public Randonnee annuleParticipation(int idRandonneur, int idRandonnee) {
+		Statement stmt = null;
+		String sql = "DELETE FROM randonneurRandonnee"
+				+ " WHERE idRandonneur=" + idRandonneur
+				+ " AND idRandonnee=" + idRandonnee;
+		
+		try {
+			stmt = this.conn.createStatement();
+			stmt.executeUpdate(sql);
+			stmt.close();
+			this.conn.commit();
+			return getRandonneeById(idRandonnee);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public Randonnee ajoutRando(String libelle, String date, String lieu, String date_echeance, int participants_min, int participants_inscrits, int participants_handicapes, int active) {
 		Statement stmt = null;
 		String sql = ("INSERT INTO randonnee (libelle, date, lieu, date_echeance, participant_min, participant_inscrit, participant_handicape, active)"
@@ -269,6 +287,24 @@ public class MysqlBd {
 			this.conn.close();
 			return rando;
 		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Randonnee ajoutParticipant(int idRandonnee) {
+		Statement stmt = null;
+		String sql = "UPDATE randonnee" + 
+				" SET participant_inscrit = participant_inscrit+1" + 
+				" WHERE idRando=" + idRandonnee;
+		
+		try {
+			stmt = this.conn.createStatement();
+			stmt.executeUpdate(sql);
+			stmt.close();
+			this.conn.commit();
+			return getRandonneeById(idRandonnee);
+		} catch(Exception e) {
 			e.printStackTrace();
 			return null;
 		}

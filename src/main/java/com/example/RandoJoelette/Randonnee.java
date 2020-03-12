@@ -11,6 +11,7 @@ public class Randonnee {
 	private int participantInscrit;
 	private int participantHandicape;
 	private int active;
+	
 	public Randonnee(int idRando, String libelle, String date, String lieu, String dateEcheance, int participantMin,
 			int participantInscrit, int participantHandicape, int active) {
 		this.idRando = idRando;
@@ -77,8 +78,4 @@ public class Randonnee {
 	public void setActive(int active) {
 		this.active = active;
 	}
-	
-	
-	
-	
 }

@@ -136,6 +136,23 @@ public class Login {
 		}
 	}
 	
+	@CrossOrigin(origins = "*")
+	@GetMapping("/annuleParticipation")
+	public String annuleParticipation(@RequestParam int idRandonneur, @RequestParam int idRandonnee) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			MysqlBd bd = new MysqlBd();
+			bd.connect("198699_admin", "Adminrando123");
+			Randonnee randonnee = bd.annuleParticipation(idRandonneur, idRandonnee);
+			String reponse = mapper.writeValueAsString(randonnee);
+			bd.close();
+			return reponse;
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
 	@CrossOrigin(origins= "*")
 	@GetMapping("/ajoutRandonnee")
 	public String ajoutRandonnee(@RequestParam String libelle, @RequestParam String date, @RequestParam String lieu, @RequestParam String date_echeance, @RequestParam int participants_min, @RequestParam int participants_inscrits, @RequestParam int participants_handicapes, @RequestParam int active) {
@@ -145,6 +162,23 @@ public class Login {
 			MysqlBd bd = new MysqlBd();
 			bd.connect("198699_admin", "Adminrando123");
 			Randonnee rando = bd.ajoutRando(libelle, date, lieu, date_echeance, participants_min, participants_inscrits, participants_handicapes, active);
+			String reponse = mapper.writeValueAsString(rando);
+			bd.close();
+			return reponse;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@CrossOrigin(origins= "*")
+	@GetMapping("/ajoutParticipant")
+	public String ajoutParticipant(@RequestParam int idRandonnee) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			MysqlBd bd = new MysqlBd();
+			bd.connect("198699_admin", "Adminrando123");
+			Randonnee rando = bd.ajoutParticipant(idRandonnee);
 			String reponse = mapper.writeValueAsString(rando);
 			bd.close();
 			return reponse;
