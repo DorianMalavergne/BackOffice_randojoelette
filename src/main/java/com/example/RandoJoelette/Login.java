@@ -136,6 +136,23 @@ public class Login {
 		}
 	}
 	
+	@CrossOrigin(origins = "*")
+	@GetMapping("/annuleParticipation")
+	public String annuleParticipation(@RequestParam int idRandonneur, @RequestParam int idRandonnee) {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		try {
+			MysqlBd bd = new MysqlBd();
+			bd.connect("198699_admin", "Adminrando123");
+			Randonnee randonnee = bd.annuleParticipation(idRandonneur, idRandonnee);
+			String reponse = mapper.writeValueAsString(randonnee);
+			bd.close();
+			return reponse;
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
 	@CrossOrigin(origins= "*")
 	@GetMapping("/ajoutRandonnee")
 	public String ajoutRandonnee(@RequestParam String libelle, @RequestParam String date, @RequestParam String lieu, @RequestParam String date_echeance, @RequestParam int participants_min, @RequestParam int participants_inscrits, @RequestParam int participants_handicapes, @RequestParam int active) {
